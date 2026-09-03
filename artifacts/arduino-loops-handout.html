@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Arduino Loops — 9th Grade Handout</title>
+  <style>
+    :root {
+      --ink: #1a2332;
+      --muted: #4a5568;
+      --paper: #f7f4ee;
+      --card: #ffffff;
+      --teal: #0d7377;
+      --teal-dk: #095456;
+      --orange: #e07a2f;
+      --navy: #2c3e6b;
+      --green: #2d8a4e;
+      --purple: #6b3fa0;
+      --red: #c0392b;
+      --line: #d9d3c7;
+      --code-bg: #1e2430;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+      color: var(--ink);
+      background: var(--paper);
+      line-height: 1.45;
+    }
+
+    .page {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 28px 22px 60px;
+    }
+
+    header.banner {
+      background: linear-gradient(135deg, var(--navy) 0%, var(--teal) 100%);
+      color: white;
+      border-radius: 16px;
+      padding: 28px 28px 24px;
+      margin-bottom: 22px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    header.banner::after {
+      content: "";
+      position: absolute;
+      right: -30px;
+      top: -40px;
+      width: 180px;
+      height: 180px;
+      border: 18px solid rgba(255,255,255,0.08);
+      border-radius: 50%;
+    }
+
+    .kicker {
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      font-size: 11px;
+      font-weight: 700;
+      opacity: 0.85;
+      margin: 0 0 6px;
+    }
+
+    h1 {
+      margin: 0 0 8px;
+      font-size: 32px;
+      letter-spacing: -0.02em;
+    }
+
+    .subtitle {
+      margin: 0;
+      font-size: 15px;
+      opacity: 0.92;
+      max-width: 620px;
+    }
+
+    h2 {
+      font-size: 22px;
+      margin: 28px 0 10px;
+      color: var(--navy);
+    }
+
+    h3 {
+      font-size: 16px;
+      margin: 0 0 8px;
+    }
+
+    p { margin: 0 0 10px; }
+
+    .lead {
+      font-size: 17px;
+      background: white;
+      border: 1px solid var(--line);
+      border-left: 6px solid var(--orange);
+      padding: 14px 16px;
+      border-radius: 8px;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 16px;
+    }
+
+    .tag {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 3px 8px;
+      border-radius: 999px;
+      color: white;
+      margin-bottom: 8px;
+    }
+
+    .tag.forever { background: var(--orange); }
+    .tag.for { background: var(--teal); }
+    .tag.while { background: var(--navy); }
+    .tag.dowhile { background: var(--purple); }
+
+    .use {
+      font-size: 14px;
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+
+    pre, code {
+      font-family: "Cascadia Code", "Fira Code", "Consolas", "Courier New", monospace;
+    }
+
+    pre {
+      background: var(--code-bg);
+      color: #e8edf5;
+      padding: 12px 14px;
+      border-radius: 8px;
+      font-size: 12.5px;
+      overflow-x: auto;
+      line-height: 1.5;
+      margin: 8px 0 0;
+    }
+
+    .kw { color: #7dd3fc; }
+    .fn { color: #fbbf24; }
+    .num { color: #86efac; }
+    .cm { color: #94a3b8; }
+    .str { color: #f9a8d4; }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: white;
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      font-size: 14px;
+    }
+
+    th {
+      background: var(--navy);
+      color: white;
+      text-align: left;
+      padding: 9px 12px;
+      font-weight: 600;
+    }
+
+    td {
+      padding: 9px 12px;
+      border-top: 1px solid var(--line);
+      vertical-align: top;
+    }
+
+    tr:nth-child(even) td { background: #f3f0ea; }
+
+    .diagram {
+      background: #fff;
+      border: 1px dashed var(--line);
+      border-radius: 12px;
+      padding: 10px;
+      margin: 10px 0 4px;
+      text-align: center;
+    }
+
+    .diagram svg { max-width: 100%; height: auto; }
+
+    .callout {
+      border-radius: 10px;
+      padding: 12px 14px;
+      margin: 14px 0;
+      font-size: 14px;
+    }
+
+    .warn {
+      background: #fdecea;
+      border-left: 5px solid var(--red);
+    }
+
+    .tip {
+      background: #e8f6ee;
+      border-left: 5px solid var(--green);
+    }
+
+    .try {
+      background: #fff7ea;
+      border-left: 5px solid var(--orange);
+    }
+
+    ol.try-list { margin: 6px 0 0; padding-left: 20px; }
+    ol.try-list li { margin-bottom: 6px; }
+
+    footer.note {
+      margin-top: 28px;
+      font-size: 12px;
+      color: var(--muted);
+      text-align: center;
+    }
+
+    .section-break { page-break-before: always; }
+
+    @media print {
+      body { background: white; }
+      .page { padding: 0; max-width: none; }
+      header.banner { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      pre { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      th { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      .card, .lead, .callout { break-inside: avoid; }
+    }
+
+    @media (max-width: 700px) {
+      .grid-2 { grid-template-columns: 1fr; }
+      h1 { font-size: 26px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header class="banner">
+      <p class="kicker">NBHS · Technology, Engineering &amp; Design · Arduino Basics</p>
+      <h1>Loops in Arduino</h1>
+      <p class="subtitle">How a microcontroller repeats work — the four loops you will actually use, when to pick each one, and the smallest examples that still make sense.</p>
+    </header>
+
+    <p class="lead"><strong>A loop is a way to say “do this again.”</strong> Computers are great at repeating. You should almost never copy-paste the same 5 lines of code 20 times. Write the action once, then wrap it in a loop.</p>
+
+    <!-- FOREVER LOOP -->
+    <h2>1. The Arduino <code>loop()</code> — the forever loop</h2>
+    <div class="grid-2">
+      <div class="card">
+        <span class="tag forever">Special Arduino function</span>
+        <h3>void loop()</h3>
+        <p class="use"><strong>Use it for:</strong> the main job of your sketch. After <code>setup()</code> finishes once, Arduino runs <code>loop()</code> over and over until you unplug the board.</p>
+        <p>This is not a C++ keyword like <code>for</code>. It is a required function in every Arduino sketch. Think of it as the heartbeat of the program.</p>
+        <pre><span class="kw">void</span> <span class="fn">setup</span>() {
+  <span class="fn">pinMode</span>(LED_BUILTIN, OUTPUT);
+}
+
+<span class="kw">void</span> <span class="fn">loop</span>() {
+  <span class="fn">digitalWrite</span>(LED_BUILTIN, HIGH);
+  <span class="fn">delay</span>(<span class="num">500</span>);
+  <span class="fn">digitalWrite</span>(LED_BUILTIN, LOW);
+  <span class="fn">delay</span>(<span class="num">500</span>);
+}  <span class="cm">// goes back to the top automatically</span></pre>
+      </div>
+      <div class="card">
+        <div class="diagram" aria-label="Flowchart of Arduino loop function">
+          <svg viewBox="0 0 340 260" width="320" height="250" role="img">
+            <rect x="100" y="8" width="140" height="36" rx="6" fill="#e07a2f"/>
+            <text x="170" y="31" text-anchor="middle" fill="#fff" font-size="13" font-family="Segoe UI, Arial">Power on</text>
+            <path d="M170 44 L170 60" stroke="#2c3e6b" stroke-width="2" fill="none"/>
+            <polygon points="170,66 166,58 174,58" fill="#2c3e6b"/>
+            <rect x="85" y="66" width="170" height="36" rx="6" fill="#2c3e6b"/>
+            <text x="170" y="89" text-anchor="middle" fill="#fff" font-size="13" font-family="Segoe UI, Arial">setup() runs once</text>
+            <path d="M170 102 L170 118" stroke="#2c3e6b" stroke-width="2" fill="none"/>
+            <polygon points="170,124 166,116 174,116" fill="#2c3e6b"/>
+            <rect x="70" y="124" width="200" height="44" rx="8" fill="#0d7377"/>
+            <text x="170" y="144" text-anchor="middle" fill="#fff" font-size="13" font-family="Segoe UI, Arial">loop() runs your code</text>
+            <text x="170" y="160" text-anchor="middle" fill="#d1f4f5" font-size="11" font-family="Segoe UI, Arial">blink, read sensors, etc.</text>
+            <path d="M270 146 C310 146, 310 200, 170 200 C70 200, 40 146, 70 146" stroke="#e07a2f" stroke-width="3" fill="none"/>
+            <polygon points="78,150 68,146 78,140" fill="#e07a2f"/>
+            <text x="250" y="188" fill="#e07a2f" font-size="12" font-weight="700" font-family="Segoe UI, Arial">repeat forever</text>
+            <text x="170" y="230" text-anchor="middle" fill="#4a5568" font-size="11" font-family="Segoe UI, Arial">Stops only if power is cut or you reset.</text>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <!-- FOR LOOP -->
+    <h2>2. The <code>for</code> loop — “do this N times”</h2>
+    <div class="grid-2">
+      <div class="card">
+        <span class="tag for">Counting loop</span>
+        <p class="use"><strong>Use it when:</strong> you already know how many times to repeat. Blink 5 times. Count 0–9. Walk through pins 2 through 6.</p>
+        <p>A <code>for</code> loop has three parts in the parentheses, separated by semicolons:</p>
+        <ol>
+          <li><strong>Start</strong> — make a counter and give it a first value</li>
+          <li><strong>Condition</strong> — keep going while this is true</li>
+          <li><strong>Update</strong> — change the counter after each pass</li>
+        </ol>
+        <pre><span class="cm">// Blink the built-in LED exactly 5 times</span>
+<span class="kw">void</span> <span class="fn">setup</span>() {
+  <span class="fn">pinMode</span>(LED_BUILTIN, OUTPUT);
+  <span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">0</span>; i &lt; <span class="num">5</span>; i++) {
+    <span class="fn">digitalWrite</span>(LED_BUILTIN, HIGH);
+    <span class="fn">delay</span>(<span class="num">200</span>);
+    <span class="fn">digitalWrite</span>(LED_BUILTIN, LOW);
+    <span class="fn">delay</span>(<span class="num">200</span>);
+  }
+}
+
+<span class="kw">void</span> <span class="fn">loop</span>() {
+  <span class="cm">// nothing — the 5 blinks already happened</span>
+}</pre>
+      </div>
+      <div class="card">
+        <div class="diagram">
+          <svg viewBox="0 0 340 300" width="320" height="290" role="img">
+            <text x="170" y="18" text-anchor="middle" fill="#0d7377" font-size="13" font-weight="700" font-family="Segoe UI, Arial">for (int i = 0; i &lt; 5; i++)</text>
+            <rect x="95" y="30" width="150" height="32" rx="6" fill="#0d7377"/>
+            <text x="170" y="51" text-anchor="middle" fill="#fff" font-size="13" font-family="Segoe UI, Arial">i = 0  (start)</text>
+            <path d="M170 62 L170 78" stroke="#2c3e6b" stroke-width="2"/>
+            <polygon points="170,84 166,76 174,76" fill="#2c3e6b"/>
+            <polygon points="95,86 245,86 255,118 85,118" fill="#2c3e6b"/>
+            <text x="170" y="108" text-anchor="middle" fill="#fff" font-size="13" font-family="Segoe UI, Arial">Is i &lt; 5 ?</text>
+            <path d="M255 102 L290 102 L290 150 L245 150" stroke="#2d8a4e" stroke-width="2" fill="none"/>
+            <text x="298" y="128" fill="#2d8a4e" font-size="11" font-family="Segoe UI, Arial">YES</text>
+            <rect x="95" y="134" width="150" height="32" rx="6" fill="#0d7377"/>
+            <text x="170" y="155" text-anchor="middle" fill="#fff" font-size="13" font-family="Segoe UI, Arial">Do the body</text>
+            <path d="M170 166 L170 182" stroke="#2c3e6b" stroke-width="2"/>
+            <rect x="95" y="182" width="150" height="32" rx="6" fill="#e07a2f"/>
+            <text x="170" y="203" text-anchor="middle" fill="#fff" font-size="13" font-family="Segoe UI, Arial">i++  (i becomes i+1)</text>
+            <path d="M95 198 L40 198 L40 102 L95 102" stroke="#e07a2f" stroke-width="2" fill="none"/>
+            <polygon points="95,102 87,98 87,106" fill="#e07a2f"/>
+            <path d="M170 118 L170 230" stroke="#c0392b" stroke-width="2"/>
+            <text x="180" y="225" fill="#c0392b" font-size="11" font-family="Segoe UI, Arial">NO</text>
+            <rect x="95" y="230" width="150" height="32" rx="6" fill="#6b7280"/>
+            <text x="170" y="251" text-anchor="middle" fill="#fff" font-size="13" font-family="Segoe UI, Arial">Leave the loop</text>
+            <text x="170" y="288" text-anchor="middle" fill="#4a5568" font-size="11" font-family="Segoe UI, Arial">i values: 0 → 1 → 2 → 3 → 4  then stop</text>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <!-- WHILE LOOP -->
+    <h2>3. The <code>while</code> loop — “keep going as long as…”</h2>
+    <div class="grid-2">
+      <div class="card">
+        <span class="tag while">Condition loop</span>
+        <p class="use"><strong>Use it when:</strong> you do <em>not</em> know the count. Wait until a button is pressed. Wait until a sensor reading is high enough. Keep polling until something changes.</p>
+        <p>The test happens <strong>before</strong> the body. If the condition is already false, the body never runs.</p>
+        <p>You are responsible for changing something inside the loop so the condition can become false. If you forget, you create an infinite loop.</p>
+        <pre><span class="kw">const int</span> buttonPin = <span class="num">2</span>;
+
+<span class="kw">void</span> <span class="fn">setup</span>() {
+  <span class="fn">pinMode</span>(LED_BUILTIN, OUTPUT);
+  <span class="fn">pinMode</span>(buttonPin, INPUT_PULLUP);
+  <span class="fn">digitalWrite</span>(LED_BUILTIN, HIGH);  <span class="cm">// LED on = waiting</span>
+
+  <span class="kw">while</span> (<span class="fn">digitalRead</span>(buttonPin) == HIGH) {
+    <span class="cm">// do nothing until the button is pressed</span>
+  }
+
+  <span class="fn">digitalWrite</span>(LED_BUILTIN, LOW);   <span class="cm">// LED off = go!</span>
+}
+
+<span class="kw">void</span> <span class="fn">loop</span>() { }</pre>
+      </div>
+      <div class="card">
+        <div class="diagram">
+          <svg viewBox="0 0 340 270" width="320" height="260" role="img">
+            <rect x="95" y="10" width="150" height="32" rx="6" fill="#2c3e6b"/>
+            <text x="170" y="31" text-anchor="middle" fill="#fff" font-size="13" font-family="Segoe UI, Arial">Arrive at while</text>
+            <path d="M170 42 L170 58" stroke="#2c3e6b" stroke-width="2"/>
+            <polygon points="95,60 245,60 255,96 85,96" fill="#2c3e6b"/>
+            <text x="170" y="83" text-anchor="middle" fill="#fff" font-size="13" font-family="Segoe UI, Arial">Condition true?</text>
+            <path d="M255 78 L295 78 L295 130 L245 130" stroke="#2d8a4e" stroke-width="2" fill="none"/>
+            <text x="300" y="108" fill="#2d8a4e" font-size="11" font-family="Segoe UI, Arial">YES</text>
+            <rect x="95" y="114" width="150" height="36" rx="6" fill="#0d7377"/>
+            <text x="170" y="137" text-anchor="middle" fill="#fff" font-size="13" font-family="Segoe UI, Arial">Run the body</text>
+            <path d="M95 132 L40 132 L40 78 L85 78" stroke="#e07a2f" stroke-width="2" fill="none"/>
+            <polygon points="85,78 77,74 77,82" fill="#e07a2f"/>
+            <text x="18" y="110" fill="#e07a2f" font-size="11" font-family="Segoe UI, Arial">check
+again</text>
+            <path d="M170 96 L170 170" stroke="#c0392b" stroke-width="2"/>
+            <text x="180" y="160" fill="#c0392b" font-size="11" font-family="Segoe UI, Arial">NO</text>
+            <rect x="95" y="170" width="150" height="32" rx="6" fill="#6b7280"/>
+            <text x="170" y="191" text-anchor="middle" fill="#fff" font-size="13" font-family="Segoe UI, Arial">Skip / leave loop</text>
+            <text x="170" y="230" text-anchor="middle" fill="#4a5568" font-size="12" font-family="Segoe UI, Arial">Checks FIRST. Body might run 0 times.</text>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <!-- DO WHILE -->
+    <h2>4. The <code>do-while</code> loop — “do it at least once”</h2>
+    <div class="grid-2">
+      <div class="card">
+        <span class="tag dowhile">Run-then-check</span>
+        <p class="use"><strong>Use it when:</strong> the body must happen once before you even look at the condition. Read a sensor at least once. Show a menu once, then keep showing it until the user picks a valid choice.</p>
+        <p>Same idea as <code>while</code>, except the test is at the <strong>bottom</strong>. Notice the semicolon after <code>while (condition);</code></p>
+        <pre><span class="kw">int</span> reading = <span class="num">0</span>;
+
+<span class="kw">void</span> <span class="fn">setup</span>() {
+  <span class="fn">Serial</span>.<span class="fn">begin</span>(<span class="num">9600</span>);
+  <span class="kw">do</span> {
+    reading = <span class="fn">analogRead</span>(A0);
+    <span class="fn">Serial</span>.<span class="fn">println</span>(reading);
+    <span class="fn">delay</span>(<span class="num">50</span>);
+  } <span class="kw">while</span> (reading &lt; <span class="num">100</span>);
+}
+
+<span class="kw">void</span> <span class="fn">loop</span>() { }</pre>
+      </div>
+      <div class="card">
+        <div class="diagram">
+          <svg viewBox="0 0 340 270" width="320" height="260" role="img">
+            <rect x="95" y="10" width="150" height="32" rx="6" fill="#6b3fa0"/>
+            <text x="170" y="31" text-anchor="middle" fill="#fff" font-size="13" font-family="Segoe UI, Arial">Run the body first</text>
+            <path d="M170 42 L170 58" stroke="#2c3e6b" stroke-width="2"/>
+            <polygon points="95,60 245,60 255,96 85,96" fill="#2c3e6b"/>
+            <text x="170" y="83" text-anchor="middle" fill="#fff" font-size="13" font-family="Segoe UI, Arial">Condition true?</text>
+            <path d="M85 78 L40 78 L40 26 L95 26" stroke="#e07a2f" stroke-width="2" fill="none"/>
+            <polygon points="95,26 87,22 87,30" fill="#e07a2f"/>
+            <text x="8" y="56" fill="#e07a2f" font-size="11" font-family="Segoe UI, Arial">YES
+again</text>
+            <path d="M170 96 L170 130" stroke="#c0392b" stroke-width="2"/>
+            <text x="180" y="120" fill="#c0392b" font-size="11" font-family="Segoe UI, Arial">NO</text>
+            <rect x="95" y="130" width="150" height="32" rx="6" fill="#6b7280"/>
+            <text x="170" y="151" text-anchor="middle" fill="#fff" font-size="13" font-family="Segoe UI, Arial">Leave the loop</text>
+            <text x="170" y="196" text-anchor="middle" fill="#4a5568" font-size="12" font-family="Segoe UI, Arial">Body always runs at least once,</text>
+            <text x="170" y="214" text-anchor="middle" fill="#4a5568" font-size="12" font-family="Segoe UI, Arial">even if the condition starts false.</text>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <h2>Which loop should I pick?</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Loop</th>
+          <th>Best for</th>
+          <th>Know the count?</th>
+          <th>Runs at least once?</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>loop()</strong></td>
+          <td>The whole sketch after setup</td>
+          <td>No — runs forever</td>
+          <td>Yes, until power off</td>
+        </tr>
+        <tr>
+          <td><strong>for</strong></td>
+          <td>A fixed number of repeats</td>
+          <td>Yes</td>
+          <td>Only if the start already passes the test</td>
+        </tr>
+        <tr>
+          <td><strong>while</strong></td>
+          <td>Wait for an event or sensor</td>
+          <td>No</td>
+          <td>No — test first</td>
+        </tr>
+        <tr>
+          <td><strong>do-while</strong></td>
+          <td>Must try once, then maybe repeat</td>
+          <td>No</td>
+          <td>Yes — body first</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="callout warn">
+      <strong>Watch out for infinite loops.</strong> If a <code>while</code> or <code>do-while</code> condition never becomes false, the board sits in that loop and the rest of your program never runs. Classic mistake: forgetting to change the variable (or read the button) inside the loop. <code>loop()</code> is <em>supposed</em> to be infinite. The others usually are not.
+    </div>
+
+    <div class="callout tip">
+      <strong>Classroom memory trick.</strong> <code>for</code> = “I already know how many.” &nbsp; <code>while</code> = “keep going while this is true.” &nbsp; <code>do-while</code> = “do it, then ask if we should do it again.” &nbsp; <code>loop()</code> = “the sketch’s heartbeat.”
+    </div>
+
+    <div class="callout try">
+      <strong>Try it (10 minutes).</strong>
+      <ol class="try-list">
+        <li>Use a <code>for</code> loop in <code>setup()</code> to blink the built-in LED <strong>3 long, 3 short</strong> (Morse “S” is three shorts — make an “SOS” if you want extra credit).</li>
+        <li>Add a button on pin 2. Use a <code>while</code> loop so nothing else happens until the button is pressed.</li>
+        <li>Rewrite the 5-blink <code>for</code> example as a <code>while</code> loop. Same result, different tool. Which version is easier to read?</li>
+      </ol>
+    </div>
+
+    <footer class="note">
+      Arduino language is based on C++. These same loop rules work in most programming languages you will meet later.<br />
+      TED / CT10 · Loops handout · Keep this page with your sketch notes.
+    </footer>
+  </div>
+</body>
+</html>

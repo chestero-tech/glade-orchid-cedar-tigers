@@ -1,0 +1,36 @@
+{
+  "url": "http://127.0.0.1:8080/",
+  "viewports": {
+    "desktop": {
+      "width": 1280,
+      "height": 800,
+      "status": 200,
+      "title": "North Star",
+      "hasCanvas": false,
+      "bodyTextLen": 1881,
+      "bodyTextHash": "36fc0be627aba3cbd0ca3cf96f8c74fe21f67b5aa8de178c6742468083e9fe1c",
+      "bodyTextPrefix": "North Star ENGINEERING PROBLEM STATEMENTS ENGINEERING · PROBLEM ",
+      "horizontalOverflow": false,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "screenshot": "/workspace/screenshots/app-builder-preview.png"
+    },
+    "mobile": {
+      "width": 390,
+      "height": 844,
+      "status": 200,
+      "title": "North Star",
+      "hasCanvas": false,
+      "bodyTextLen": 1850,
+      "bodyTextHash": "085e275f9b6300138820dc92a5b85879c6a202c4b7985e3628bf1533088fedd5",
+      "bodyTextPrefix": "North Star ENGINEERING · PROBLEM FRAMING An effective problem st",
+      "horizontalOverflow": false,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "screenshot": "/workspace/screenshots/app-builder-preview-mobile.png"
+    }
+  },
+  "brandWarnings": [],
+  "authWarnings": [],
+  "verdictFile": "/workspace/screenshots/app-builder-preview.json"
+}
